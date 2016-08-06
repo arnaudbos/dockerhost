@@ -35,8 +35,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Ports
   ##############################################################################
   DOCKERHOST_CONFIG['forward_ports'].each do |forward_port|
-    config.vm.network "forwarded_port",
-      host: forward_port["host"], guest: forward_port["guest"]
+    config.vm.network 'forwarded_port',
+      host: forward_port['host'], guest: forward_port['guest']
   end
 
   # folders
@@ -44,6 +44,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.synced_folder ".", "/vagrant", disabled: true
 
   DOCKERHOST_CONFIG['shared_folders'].each do |shared_folder|
-    config.vm.synced_folder shared_folder["host"], shared_folder["guest"]
+    config.vm.synced_folder shared_folder['host'], shared_folder['guest']
   end
 end
