@@ -1,4 +1,5 @@
-#!/bin/sh
+#!/bin/bash
+
 VBOX_VERSION="5.1.2"
 VBOX_GUEST_ISO_URL="http://download.virtualbox.org/virtualbox/$VBOX_VERSION/VBoxGuestAdditions_$VBOX_VERSION.iso"
 VBOX_GUEST_ISO_PATH="VBoxGuestAdditions.iso"

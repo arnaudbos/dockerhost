@@ -7,10 +7,11 @@ configs:
       name: 'dockerhost'
       forward_ports:
         - { host: 8000, guest: 8000 }
+      shared_folders:
+        - { host: 'apps/', guest: '/usr/local/src', follow_symlinks: true }
       scripts:
-        - provision/setup.sh
+        - { path: provision/setup.sh, args: [] }
         # Tried when I was having issues w/ shared folders but
         # it didn't help, so I'm just leaving it here, commented
         # - provision/vbox.sh
-      shared_folders:
-        - { host: 'apps/', guest: '/usr/local/src' }
+        - { path: provision/start.sh, args: ["--apps-folder=/usr/local/src"] }
