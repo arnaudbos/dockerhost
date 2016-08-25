@@ -8,7 +8,7 @@ configs:
       forward_ports:
         - { host: 8000, guest: 8000 }
       shared_folders:
-        - { host: 'apps/', guest: '/usr/local/src', follow_symlinks: true }
+        - { host: 'apps/', guest: '/usr/local/src', share_self: false, follow_symlinks: true }
       scripts:
         - { path: provision/setup.sh, args: [] }
         # Tried when I was having issues w/ shared folders but

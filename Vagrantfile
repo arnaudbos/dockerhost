@@ -18,7 +18,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provider :virtualbox do |vb|
       vb.name = "#{DOCKERHOST_CONFIG['name']}"
-      vb.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root", "1"]
   end
 
   config.vm.define "#{DOCKERHOST_CONFIG['name']}"
@@ -49,19 +48,27 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.synced_folder ".", "/vagrant", disabled: true
 
   DOCKERHOST_CONFIG['shared_folders'].each do |shared_folder|
-    # Sync folder from config
-    config.vm.synced_folder shared_folder['host'], shared_folder['guest']
 
-    if shared_folder['follow_symlinks']
-      # Sync subfolder symlinks if 'follow_symlinks' option is set
-      symlinks = Dir.entries(shared_folder['host']).select {
-        |entry| File.directory? File.join(shared_folder['host'], entry) and
-                File.lstat(File.join(shared_folder['host'], entry)).symlink?
-      }
-      symlinks.each do |symlink|
-        symlink_host = File.readlink(File.join(shared_folder['host'], symlink))
-        symlink_guest = File.join(shared_folder['guest'], symlink)
-        config.vm.synced_folder symlink_host, symlink_guest
+    if shared_folder['share_self']
+      # Sync folder from config
+      config.vm.synced_folder shared_folder['host'], shared_folder['guest']
+    else
+      subfolders = Dir.entries(shared_folder['host'])
+        .select{|name| name if name != '.' and name != '..'}
+        .map{|name| Hash["name", name,
+                         "path", File.join(shared_folder['host'], name)]}
+        .map{|subfolder| subfolder.merge(
+                          Hash["symlink", File.lstat(subfolder['path']).symlink?]
+                          ) if File.directory? subfolder['path']}
+        .compact
+
+      subfolders.each do |subfolder|
+        host = File.expand_path(subfolder['path'])
+        if shared_folder['share_self'] and subfolder['symlink']
+          host = File.expand_path(File.readlink(host))
+        end
+        guest = File.join(shared_folder['guest'], subfolder['name'])
+        config.vm.synced_folder host, guest
       end
     end
   end
