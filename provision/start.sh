@@ -18,20 +18,15 @@ function _list_excluded_apps() {
 function _install_app() {
   local app=$1 app_folder=$2
   local runfile="${app_folder}/run.sh"
-  if [ ! -f "$runfile" ];then
+  if [ -f "$runfile" ];then
     bash "${runfile}"
     local ec=$?
-    echo "------------------------------------"
-    echo
     if [[ $ec -ne 0 ]];then
       echo "Can not install app '${app}'." >&2
       exit 1
     fi
   else
-    echo
     echo "Unable to locate $runfile, skipping install"
-    echo "------------------------------------"
-    echo
   fi
 }
 
