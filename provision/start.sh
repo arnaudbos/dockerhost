@@ -175,8 +175,8 @@ function main() {
     local -a excluded_apps=$(_list_excluded_apps "$excluded_apps")
     install_apps $apps_folder $excluded_apps
     # start_apps $apps_folder $excluded_apps
-    # cleanup_containers
-    # cleanup_images
+    cleanup_containers
+    cleanup_images
   fi
 }
 
