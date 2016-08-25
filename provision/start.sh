@@ -51,25 +51,6 @@ function install_apps() {
   done
 }
 
-function start_apps() {
-  if [[ -f $PROJECTLIST ]];then
-    for project in $(cat "$PROJECTLIST")
-    do
-      echo "Starting project ${project}"
-      echo "------------------------------------"
-      echo
-      rbrequire --project="${project}"
-      local ec=$?
-      echo "------------------------------------"
-      echo
-      if [ $ec -ne 0 ];then
-        echo "Can not start ${project}." >&2
-        exit 1
-      fi
-    done
-  fi
-}
-
 function cleanup_images() {
   local images=$(docker images -f "dangling=true" -q)
   if [[ ! -z $images ]];then
@@ -174,7 +155,6 @@ function main() {
     echo
     local -a excluded_apps=$(_list_excluded_apps "$excluded_apps")
     install_apps $apps_folder $excluded_apps
-    # start_apps $apps_folder $excluded_apps
     cleanup_containers
     cleanup_images
   fi
