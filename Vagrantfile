@@ -2,6 +2,7 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 require 'yaml'
+require_relative 'provision'
 
 # Specify Vagrant version and Vagrant API version
 VAGRANTFILE_API_VERSION = "2"
@@ -53,22 +54,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       # Sync folder from config
       config.vm.synced_folder shared_folder['host'], shared_folder['guest']
     else
-      subfolders = Dir.entries(shared_folder['host'])
-        .select{|name| name if name != '.' and name != '..'}
-        .map{|name| Hash["name", name,
-                         "path", File.join(shared_folder['host'], name)]}
-        .map{|subfolder| subfolder.merge(
-                          Hash["symlink", File.lstat(subfolder['path']).symlink?]
-                          ) if File.directory? subfolder['path']}
-        .compact
+      subfolders = Provision.get_subfolders(shared_folder['host'])
 
       subfolders.each do |subfolder|
-        host = File.expand_path(subfolder['path'])
-        if shared_folder['share_self'] and subfolder['symlink']
-          host = File.expand_path(File.readlink(host))
-        end
-        guest = File.join(shared_folder['guest'], subfolder['name'])
-        config.vm.synced_folder host, guest
+        Provision.share_folder!(config, subfolder,
+                                shared_folder['guest'],
+                                shared_folder['follow_symlinks'])
       end
     end
   end
