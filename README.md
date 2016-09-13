@@ -8,8 +8,9 @@ This repository contains my development VM, which is based on Vagrant and Virtua
 Also I want to play with Vagrant and Docker (Ansible someday soon) but
 the state of Docker on Mac and Windows is not satisfying: Boot2Docker,
 Docker Toolbox, ... all I read is "install stuff, install stuff, install stuff".
+
 At the moment I'm using both Ubuntu, Mac OS X and Windows 7 on a daily basis,
-and I don't want to bother.
+and I don't want to bother installing stuff.
 
 ## Goal
 
@@ -27,27 +28,28 @@ containers host for projects under development.
 > As a developer, I want to be able to run any number of projects, which will
 be called `apps` in this context, inside my environment.
 
-* The VM must not be tied to a given list of projects/apps, it
+* The VM should not be tied to a given list of projects/apps, it
 must be as generic as possible.
 * Use a YAML configuration file to specify the Vagrantfile's job.
 
 > As a developer, I want each individual app to be loosely coupled to this
 development environment.
 
+* The `app` will now **nothing** about its host.
 * The VM will host any app located in its `apps` folder.
 * The VM will follow symbolic links placed in its `apps` folder.
-* **Requirement**: each app must have a `run.sh` script in its home directory
-in order to be started by the VM provisioning.
-* **Requirement**: each app running in a Docker container ueeds a YAML
-configuration file with [the following structure][vagrantfile-config] along
-with its Vagrantfile.
+* The VM will use docker-compose for provisioning `apps` ("generic" VM only
+  goes so far, as I've had issues specifying ports forwardings dynamically for
+  apps)
+* **Requirement**: each app must either be running in a Docker container and
+  provisioning will be done with docker-compose, or have a `run.sh ` script in
+  its home directory in order to be started by the `start.sh` provisioning
+  script (more on that later).
 
 > As a maintainer, I want to make use of a minmum number of technologies to glue
 the environment together.
 
-* Make use of bash for scripting.
+* Make use of Docker and bash for scripting for provisioning.
 * Play with Ansible someday soon.
-* Vagrant and Vagrantfile are ruby, so do not use other languages
-for provisioning, ruby will be OK.
-
-[vagrantfile-config]: deadlink
+* Vagrant and Vagrantfile are ruby, so do not use other scripting languages
+  for provisioning: ruby will be OK.

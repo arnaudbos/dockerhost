@@ -16,6 +16,7 @@ module Provision
       host = File.expand_path(File.readlink(host))
     end
     guest = File.join(guest, folder['name'])
+
     config.vm.synced_folder host, guest
   end
 end

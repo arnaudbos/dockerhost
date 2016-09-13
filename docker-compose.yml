@@ -1,0 +1,8 @@
+puzzley:
+  build: ./puzzley
+  ports:
+    - "5555:5555"
+  volumes:
+    - ./puzzley:/usr/src/app
+#  links:
+#    - dummy
