@@ -41,10 +41,6 @@ development environment.
 * The VM will use docker-compose for provisioning `apps` ("generic" VM only
   goes so far, as I've had issues specifying ports forwardings dynamically for
   apps)
-* **Requirement**: each app must either be running in a Docker container and
-  provisioning will be done with docker-compose, or have a `run.sh ` script in
-  its home directory in order to be started by the `start.sh` provisioning
-  script (more on that later).
 
 > As a maintainer, I want to make use of a minmum number of technologies to glue
 the environment together.
