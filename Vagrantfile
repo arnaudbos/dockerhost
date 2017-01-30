@@ -23,8 +23,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.define "#{DOCKERHOST_CONFIG['name']}"
   config.vm.box = "#{DOCKERHOST_CONFIG['box']}"
-  config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
   config.vm.network "private_network", ip: "192.168.50.100"
+
+  config.vm.provision "fix-no-tty", type: "shell" do |s|
+    s.privileged = false
+    s.inline = "sudo sed -i '/tty/!s/mesg n/tty -s \\&\\& mesg n/' /root/.profile"
+  end
 
   # Provision
   ##############################################################################
