@@ -6,3 +6,9 @@ puzzley:
     - ./puzzley:/usr/src/app
 #  links:
 #    - dummy
+docteur-souris:
+  build: ./docteur-souris
+  ports:
+   - "80:80"
+  volumes:
+    - ./docteur-souris:/usr/src/app

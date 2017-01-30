@@ -7,6 +7,7 @@ configs:
       name: 'dockerhost'
       forward_ports:
         - { host: 5555, guest: 5555 }
+        - { host: 80, guest: 80 }
       apps_folder:
         host: 'apps/'
         guest: '/usr/local/src'
