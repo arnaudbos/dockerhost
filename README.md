@@ -1,3 +1,11 @@
+> DEPRECATED - The more I use Vagrant and Docker for my development environment
+> the more I find this repo awkward. It was practical at first to have a single
+> Vagrant managed VM containing multiple unrelated Docker containers, but the
+> more each individual project independently grows, the more it feels natural
+> to put it in its own VM.
+> This repo is now deprecated and will not be updated anymore. It was a fun
+> experiment and helped me learn a few things about Vagrant and Docker ninjutsu.
+
 # Dockerhost
 
 This repository contains my development VM, which is based on Vagrant and VirtualBox.
